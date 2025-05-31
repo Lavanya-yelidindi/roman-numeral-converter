@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,20 +22,28 @@ public class RomanNumeralController {
 	private RomanNumeralService romanNumeralService;
 
 	@PostMapping("/toRoman")
-	public Map<String, String> convertToRoman(@RequestBody Map<String, Integer> request) {
-		int number = request.get("number");
-		String roman = romanNumeralService.toRoman(number);
-		Map<String, String> response = new HashMap<>();
-		response.put("roman", roman);
-		return response;
+	public ResponseEntity<?> convertToRoman(@RequestBody Map<String, Integer> request) {
+		try {
+			int number = request.get("number");
+			String roman = romanNumeralService.toRoman(number);
+			Map<String, String> response = new HashMap<>();
+			response.put("roman", roman);
+			return ResponseEntity.ok(response);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
 	}
 
 	@PostMapping("/toNumber")
-	public Map<String, Integer> convertToNumber(@RequestBody Map<String, String> request) {
-		String roman = request.get("roman");
-		int number = romanNumeralService.toNumber(roman);
-		Map<String, Integer> response = new HashMap<>();
-		response.put("number", number);
-		return response;
+	public ResponseEntity<?> convertToNumber(@RequestBody Map<String, String> request) {
+		try {
+			String roman = request.get("roman");
+			int number = romanNumeralService.toNumber(roman);
+			Map<String, Integer> response = new HashMap<>();
+			response.put("number", number);
+			return ResponseEntity.ok(response);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
 	}
 }
