@@ -63,6 +63,9 @@ public class RomanNumeralService {
                 i++;
             }
         }
+        if (result <= 0 || result > 1000) {
+        	throw new IllegalArgumentException("Roman Number must be between I and M");
+        }
         return result;
     }
 }
